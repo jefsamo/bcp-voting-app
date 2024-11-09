@@ -41,13 +41,6 @@ const StatsGrid = () => {
     ],
   });
 
-  const onGoingProposals = multipleData![2]?.result!.filter((proposal) => {
-    return (
-      Math.floor(Date.now() / 1000) >= Number(proposal.startTime) &&
-      Math.floor(Date.now() / 1000) < Number(proposal.endTime)
-    );
-  });
-
   if (isLoading) {
     return (
       <div
@@ -63,24 +56,31 @@ const StatsGrid = () => {
       </div>
     );
   }
+
+  const onGoingProposals = multipleData![2]?.result!.filter((proposal) => {
+    return (
+      Math.floor(Date.now() / 1000) >= Number(proposal.startTime) &&
+      Math.floor(Date.now() / 1000) < Number(proposal.endTime)
+    );
+  });
   const data = [
     {
       title: "Total Proposals",
       icon: "receipt",
-      value: Number(multipleData![0]?.result),
+      value: Number(multipleData![0]?.result) ?? 0,
       diff: 20,
     },
     { title: "Total Votes", icon: "coin", value: "4,145", diff: -13 },
     {
       title: "Number of Voters",
       icon: "discount",
-      value: Number(multipleData![1]?.result),
+      value: Number(multipleData![1]?.result) ?? 0,
       diff: 18,
     },
     {
       title: "On going proposals",
       icon: "user",
-      value: onGoingProposals.length,
+      value: onGoingProposals.length ?? 0,
       diff: -30,
     },
   ] as const;
