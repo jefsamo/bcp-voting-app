@@ -41,7 +41,7 @@ const StatsGrid = () => {
     ],
   });
 
-  const onGoingProposals = multipleData![2].result!.filter((proposal) => {
+  const onGoingProposals = multipleData![2]?.result!.filter((proposal) => {
     return (
       Math.floor(Date.now() / 1000) >= Number(proposal.startTime) &&
       Math.floor(Date.now() / 1000) < Number(proposal.endTime)
@@ -67,14 +67,14 @@ const StatsGrid = () => {
     {
       title: "Total Proposals",
       icon: "receipt",
-      value: Number(multipleData![0].result),
+      value: Number(multipleData![0]?.result),
       diff: 20,
     },
     { title: "Total Votes", icon: "coin", value: "4,145", diff: -13 },
     {
       title: "Number of Voters",
       icon: "discount",
-      value: Number(multipleData![1].result),
+      value: Number(multipleData![1]?.result),
       diff: 18,
     },
     {
