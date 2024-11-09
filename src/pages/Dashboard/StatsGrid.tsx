@@ -1,4 +1,4 @@
-import { Group, Paper, SimpleGrid, Text } from "@mantine/core";
+import { Group, Loader, Paper, SimpleGrid, Text } from "@mantine/core";
 import {
   IconUserPlus,
   IconDiscount2,
@@ -8,6 +8,8 @@ import {
   IconArrowDownRight,
 } from "@tabler/icons-react";
 import classes from "./StatsGrid.module.css";
+import { useReadContracts } from "wagmi";
+import { CONTRACT_ABI, contractAddress } from "../../constants";
 
 const icons = {
   user: IconUserPlus,
@@ -16,14 +18,73 @@ const icons = {
   coin: IconCoin,
 };
 
-const data = [
-  { title: "Total Proposals", icon: "receipt", value: "13,456", diff: 34 },
-  { title: "Total Votes", icon: "coin", value: "4,145", diff: -13 },
-  { title: "Number of Voters", icon: "discount", value: "745", diff: 18 },
-  { title: "New customers", icon: "user", value: "188", diff: -30 },
-] as const;
-
 const StatsGrid = () => {
+  const voteContract = {
+    address: contractAddress,
+    abi: CONTRACT_ABI,
+  } as const;
+
+  const { data: multipleData, isLoading } = useReadContracts({
+    contracts: [
+      {
+        ...voteContract,
+        functionName: "getProposalCount",
+      },
+      {
+        ...voteContract,
+        functionName: "getTotalVoters",
+      },
+      {
+        ...voteContract,
+        functionName: "getAllProposals",
+      },
+    ],
+  });
+
+  const onGoingProposals = multipleData![2].result!.filter((proposal) => {
+    return (
+      Math.floor(Date.now() / 1000) >= Number(proposal.startTime) &&
+      Math.floor(Date.now() / 1000) < Number(proposal.endTime)
+    );
+  });
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader size={30} />
+      </div>
+    );
+  }
+  const data = [
+    {
+      title: "Total Proposals",
+      icon: "receipt",
+      value: Number(multipleData![0].result),
+      diff: 20,
+    },
+    { title: "Total Votes", icon: "coin", value: "4,145", diff: -13 },
+    {
+      title: "Number of Voters",
+      icon: "discount",
+      value: Number(multipleData![1].result),
+      diff: 18,
+    },
+    {
+      title: "On going proposals",
+      icon: "user",
+      value: onGoingProposals.length,
+      diff: -30,
+    },
+  ] as const;
+
   const stats = data.map((stat) => {
     const Icon = icons[stat.icon];
     const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
@@ -56,6 +117,7 @@ const StatsGrid = () => {
       </Paper>
     );
   });
+
   return (
     <div style={{ padding: "0 20px" }}>
       <SimpleGrid cols={{ base: 1, xs: 2, md: 4 }}>{stats}</SimpleGrid>

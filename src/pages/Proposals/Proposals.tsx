@@ -1,99 +1,58 @@
-import { Table, Progress, Anchor, Text, Group } from "@mantine/core";
-import classes from "./TableReviews.module.css";
+import { Table, Anchor, Button, Loader } from "@mantine/core";
+import { CONTRACT_ABI, contractAddress } from "../../constants";
+import { useReadContract } from "wagmi";
 
-type Review = {
-  positive: number;
-  negative: number;
+const convertToReadableDate = (epoch: any) => {
+  const date = new Date(Number(epoch) * 1000);
+
+  return `${date.toDateString()} ${date.toLocaleTimeString()}`;
 };
-
-type Data = {
-  title: string;
-  author: string;
-  year: number;
-  reviews: Review;
-};
-
-const data: Data[] = [
-  {
-    title: "Foundation",
-    author: "Isaac Asimov",
-    year: 1951,
-    reviews: { positive: 2223, negative: 259 },
-  },
-  {
-    title: "Frankenstein",
-    author: "Mary Shelley",
-    year: 1818,
-    reviews: { positive: 5677, negative: 1265 },
-  },
-  {
-    title: "Solaris",
-    author: "Stanislaw Lem",
-    year: 1961,
-    reviews: { positive: 3487, negative: 1845 },
-  },
-  {
-    title: "Dune",
-    author: "Frank Herbert",
-    year: 1965,
-    reviews: { positive: 8576, negative: 663 },
-  },
-  {
-    title: "The Left Hand of Darkness",
-    author: "Ursula K. Le Guin",
-    year: 1969,
-    reviews: { positive: 6631, negative: 993 },
-  },
-  {
-    title: "A Scanner Darkly",
-    author: "Philip K Dick",
-    year: 1977,
-    reviews: { positive: 8124, negative: 1847 },
-  },
-];
 
 const Proposal = () => {
-  const rows = data.map((row) => {
-    const totalReviews = row.reviews.negative + row.reviews.positive;
-    const positiveReviews = (row.reviews.positive / totalReviews) * 100;
-    const negativeReviews = (row.reviews.negative / totalReviews) * 100;
+  const { data: proposals, isLoading } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: contractAddress,
+    functionName: "getAllProposals",
+  });
 
+  if (isLoading) {
     return (
-      <Table.Tr key={row.title}>
-        <Table.Td>
-          <Anchor component="button" fz="sm">
-            {row.title}
-          </Anchor>
-        </Table.Td>
-        <Table.Td>{row.year}</Table.Td>
-        <Table.Td>
-          <Anchor component="button" fz="sm">
-            {row.author}
-          </Anchor>
-        </Table.Td>
-        <Table.Td>{Intl.NumberFormat().format(totalReviews)}</Table.Td>
-        <Table.Td>
-          <Group justify="space-between">
-            <Text fz="xs" c="teal" fw={700}>
-              {positiveReviews.toFixed(0)}%
-            </Text>
-            <Text fz="xs" c="red" fw={700}>
-              {negativeReviews.toFixed(0)}%
-            </Text>
-          </Group>
-          <Progress.Root>
-            <Progress.Section
-              className={classes.progressSection}
-              value={positiveReviews}
-              color="teal"
-            />
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader size={30} />
+      </div>
+    );
+  }
 
-            <Progress.Section
-              className={classes.progressSection}
-              value={negativeReviews}
-              color="red"
-            />
-          </Progress.Root>
+  const rows = proposals?.map((proposal, i) => {
+    return (
+      <Table.Tr key={i}>
+        <Table.Td>
+          <Anchor component="button" fz="sm">
+            {proposal.description}
+          </Anchor>
+        </Table.Td>
+        <Table.Td>{Number(proposal.voteCount)}</Table.Td>
+        <Table.Td>{convertToReadableDate(proposal.startTime)}</Table.Td>
+        <Table.Td> {convertToReadableDate(proposal.endTime)}</Table.Td>
+        <Table.Td>
+          <Button
+            disabled={
+              !(
+                Math.floor(Date.now() / 1000) >= Number(proposal.startTime) &&
+                Math.floor(Date.now() / 1000) < Number(proposal.endTime)
+              )
+            }
+          >
+            Vote
+          </Button>
         </Table.Td>
       </Table.Tr>
     );
@@ -110,7 +69,6 @@ const Proposal = () => {
               <Table.Th>Total Votes</Table.Th>
               <Table.Th>Start Date</Table.Th>
               <Table.Th>End Date</Table.Th>
-              <Table.Th>Votes distribution</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>

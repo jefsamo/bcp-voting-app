@@ -1,20 +1,8 @@
 import { Space, Text } from "@mantine/core";
-import { useReadContract } from "wagmi";
 import StatsGrid from "./StatsGrid";
 import classes from "./StatsGrid.module.css";
-import { CONTRACT_ABI, contractAddress } from "../../constants";
 
 const Dashboard = () => {
-  const { data, isLoading } = useReadContract({
-    abi: CONTRACT_ABI,
-    address: contractAddress,
-    functionName: "getProposalCount",
-  });
-  if (isLoading) {
-    return <>Loading...</>;
-  }
-
-  console.log(data);
   return (
     <>
       <div

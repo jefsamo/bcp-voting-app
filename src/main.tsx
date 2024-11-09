@@ -11,6 +11,7 @@ import "@mantine/core/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import "./index.css";
+import "@mantine/dates/styles.css";
 import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
 
 const queryClient = new QueryClient();

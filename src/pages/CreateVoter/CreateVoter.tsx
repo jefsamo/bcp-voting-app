@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Group, Space, Text, TextInput } from "@mantine/core";
 import classes from "./input.module.css";
-import { useDisclosure } from "@mantine/hooks";
+// import { useDisclosure } from "@mantine/hooks";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ABI, contractAddress } from "../../constants";
+import toast from "react-hot-toast";
 
 const CreateVoter = () => {
+  const { writeContract, isPending, isSuccess, isError } = useWriteContract();
+
   const [focusedAddress, setFocusedAddress] = useState(false);
   const [focusedAge, setFocusedAge] = useState(false);
   const [focusedName, setFocusedName] = useState(false);
@@ -18,8 +23,29 @@ const CreateVoter = () => {
 
   const floatingName = name.trim().length !== 0 || focusedName || undefined;
 
-  const [loading] = useDisclosure();
+  // const [loading] = useDisclosure();
 
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Voter created successfully");
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.success("There was a problem creating voter");
+    }
+  }, [isError]);
+
+  const createVoter = () => {
+    writeContract({
+      address: contractAddress,
+      abi: CONTRACT_ABI,
+      functionName: "registerVoter",
+      args: [`0x${address.slice(2)}`, name, BigInt(age)],
+    });
+  };
+  console.log("0xf420567AB3735063a21D231aEcBa1c5cae9cdf77".slice(2));
   return (
     <div>
       <Text size="lg" className={classes.title}>
@@ -71,7 +97,16 @@ const CreateVoter = () => {
       />
       <Space h="sm" />
       <Group>
-        <Button loading={loading}>Create</Button>
+        <Button
+          loading={isPending}
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.preventDefault();
+            createVoter();
+          }}
+          disabled={!address || !name || !age}
+        >
+          Create
+        </Button>
       </Group>
     </div>
   );

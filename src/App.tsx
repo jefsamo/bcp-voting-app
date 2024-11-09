@@ -9,6 +9,7 @@ import CreateVoter from "./pages/CreateVoter/CreateVoter";
 import Proposals from "./pages/Proposals/Proposals";
 import Voters from "./pages/Voters/Voters";
 import CreateProposal from "./pages/CreateProposal/CreateProposal";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
@@ -29,6 +30,17 @@ function App() {
           <Route path="voters" element={<Voters />} />
         </Route>
       </Routes>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            duration: 3000,
+          },
+          error: {
+            duration: 5000,
+          },
+        }}
+      />
     </BrowserRouter>
   );
 }

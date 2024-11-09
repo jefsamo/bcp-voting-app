@@ -1,9 +1,9 @@
 import { http, createConfig } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { mainnet, sepolia, baseSepolia } from "wagmi/chains";
 import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
 
 export const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [mainnet, sepolia, baseSepolia],
   connectors: [
     injected(),
     coinbaseWallet(),
@@ -15,6 +15,9 @@ export const config = createConfig({
     ),
     [sepolia.id]: http(
       "https://eth-sepolia.g.alchemy.com/v2/om-5_ZpCzcvOr2joTT_rH6R8LszNNKjH"
+    ),
+    [baseSepolia.id]: http(
+      "https://base-sepolia.g.alchemy.com/v2/om-5_ZpCzcvOr2joTT_rH6R8LszNNKjH"
     ),
   },
 });

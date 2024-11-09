@@ -1,37 +1,39 @@
-import { Table, ScrollArea, Text } from "@mantine/core";
+import { Table, ScrollArea, Text, Loader } from "@mantine/core";
 import classes from "./TableScrollArea.module.css";
-
-const data = [
-  {
-    name: "Athena Weissnat",
-    company: "Little - Rippin",
-    email: "Elouise.Prohaska@yahoo.com",
-  },
-  {
-    name: "Deangelo Runolfsson",
-    company: "Greenfelder - Krajcik",
-    email: "Kadin_Trantow87@yahoo.com",
-  },
-  {
-    name: "Danny Carter",
-    company: "Kohler and Sons",
-    email: "Marina3@hotmail.com",
-  },
-  {
-    name: "Trace Tremblay PhD",
-    company: "Crona, Aufderhar and Senger",
-    email: "Antonina.Pouros@yahoo.com",
-  },
-];
+import { useReadContract } from "wagmi";
+import { CONTRACT_ABI, contractAddress } from "../../constants";
+import { formatAddress } from "../../utils/FormatAddress";
 
 const Voters = () => {
-  const rows = data.map((row) => (
-    <Table.Tr key={row.name}>
-      <Table.Td>{row.name}</Table.Td>
-      <Table.Td>{row.email}</Table.Td>
-      <Table.Td>{row.company}</Table.Td>
+  const { data: voters, isLoading } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: contractAddress,
+    functionName: "getAllVoters",
+  });
+
+  const rows = voters?.map((voter) => (
+    <Table.Tr key={voter.voterAddress}>
+      <Table.Td>{voter.name}</Table.Td>
+      <Table.Td>{Number(voter.age)}</Table.Td>
+      <Table.Td>{formatAddress(voter.voterAddress)}</Table.Td>
     </Table.Tr>
   ));
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loader size={30} />
+      </div>
+    );
+  }
 
   return (
     <div style={{ padding: "0 20px" }}>

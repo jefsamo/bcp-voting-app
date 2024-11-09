@@ -1,4 +1,4 @@
-export const contractAddress = "0x358AA13c52544ECCEF6B0ADD0f801012ADAD5eE3";
+export const contractAddress = "0x052219C453F330dD0690a565d87A0CF962523172";
 
 export const CONTRACT_ABI = [
   {
@@ -48,6 +48,81 @@ export const CONTRACT_ABI = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getAllProposals",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "voteCount",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "creator",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "startTime",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "endTime",
+            type: "uint256",
+          },
+          {
+            internalType: "string[]",
+            name: "options",
+            type: "string[]",
+          },
+        ],
+        internalType: "struct Voting.ProposalInfo[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAllVoters",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "address",
+            name: "voterAddress",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "age",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct Voting.VoterInfo[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -74,6 +149,19 @@ export const CONTRACT_ABI = [
   {
     inputs: [],
     name: "getProposalCount",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getTotalVoters",
     outputs: [
       {
         internalType: "uint256",
@@ -368,4 +456,4 @@ export const CONTRACT_ABI = [
     stateMutability: "view",
     type: "function",
   },
-];
+] as const;

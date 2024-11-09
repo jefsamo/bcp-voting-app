@@ -1,18 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Group, Space, Text, TextInput } from "@mantine/core";
+import { DateTimePicker } from "@mantine/dates";
+
 import classes from "./input.module.css";
-import { useDisclosure } from "@mantine/hooks";
+import { useWriteContract } from "wagmi";
+import { CONTRACT_ABI, contractAddress } from "../../constants";
+import toast from "react-hot-toast";
 
 const CreateProposal = () => {
+  const { writeContract, isPending, isSuccess, isError } = useWriteContract();
   const [focused, setFocused] = useState(false);
   const [focusedDescription, setFocusedDescription] = useState(false);
   const [value, setValue] = useState("");
   const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  console.log(Math.floor(startDate?.getTime()! / 1000));
+
   const floating = value.trim().length !== 0 || focused || undefined;
   const floatingDescription =
     description.trim().length !== 0 || focusedDescription || undefined;
 
-  const [loading] = useDisclosure();
+  const startDateEpoch = Math.floor(startDate?.getTime()! / 1000);
+  const endDateEpoch = Math.floor(endDate?.getTime()! / 1000);
+
+  const options = value.split(",");
+
+  const createProposal = () => {
+    writeContract({
+      address: contractAddress,
+      abi: CONTRACT_ABI,
+      functionName: "createProposal",
+      args: [
+        description,
+        BigInt(startDateEpoch),
+        BigInt(endDateEpoch),
+        options,
+      ],
+    });
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Proposal created successfully");
+    }
+  }, [isSuccess]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.success("There was a problem creating proposal");
+    }
+  }, [isError]);
 
   return (
     <>
@@ -23,7 +60,7 @@ const CreateProposal = () => {
         label="Description"
         required
         classNames={classes}
-        value={value}
+        value={description}
         onChange={(event) => setDescription(event.currentTarget.value)}
         onFocus={() => setFocusedDescription(true)}
         onBlur={() => setFocusedDescription(false)}
@@ -49,8 +86,33 @@ const CreateProposal = () => {
         w="40%"
       />
       <Space h="sm" />
+      <DateTimePicker
+        label="Start date"
+        placeholder="Pick date and time"
+        w="40%"
+        value={startDate}
+        onChange={setStartDate}
+      />
+      <Space h="sm" />
+      <DateTimePicker
+        label="End date"
+        placeholder="Pick date and time"
+        w="40%"
+        value={endDate}
+        onChange={setEndDate}
+      />
+      <Space h="sm" />
       <Group>
-        <Button loading={loading}>Create</Button>
+        <Button
+          loading={isPending}
+          disabled={!value || !description || !startDate || !endDate}
+          onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.preventDefault();
+            createProposal();
+          }}
+        >
+          Create
+        </Button>
       </Group>
     </>
   );
