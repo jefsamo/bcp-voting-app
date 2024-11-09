@@ -57,7 +57,7 @@ const StatsGrid = () => {
     );
   }
 
-  const onGoingProposals = multipleData![2]?.result!.filter((proposal) => {
+  const onGoingProposals = multipleData![2]?.result?.filter((proposal) => {
     return (
       Math.floor(Date.now() / 1000) >= Number(proposal.startTime) &&
       Math.floor(Date.now() / 1000) < Number(proposal.endTime)
@@ -80,7 +80,7 @@ const StatsGrid = () => {
     {
       title: "On going proposals",
       icon: "user",
-      value: onGoingProposals.length ?? 0,
+      value: onGoingProposals?.length ?? 0,
       diff: -30,
     },
   ] as const;
