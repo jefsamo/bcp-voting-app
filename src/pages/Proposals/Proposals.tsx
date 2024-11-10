@@ -116,6 +116,7 @@ const Proposals = () => {
             disabled={!ongoing && !voterExist}
             onClick={() => {
               open();
+              //
               setCurrentProposal(i);
             }}
           >
