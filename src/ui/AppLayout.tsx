@@ -1,9 +1,22 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
+import { CONTRACT_ABI, contractAddress } from "../constants";
+import { useReadContract } from "wagmi";
+import { useAccount } from "wagmi";
+import SidebarAdmin from "../components/Sidebar/SidebarAdmin";
 
 const AppLayout = () => {
-  //   const currentUser = JSON.parse(localStorage.getItem("user")!);
+  const { address } = useAccount();
+
+  const { data: adminAddress } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: contractAddress,
+    functionName: "admin",
+  });
+
+  const isAdmin = address === adminAddress;
+
   return (
     <div
       style={{
@@ -13,7 +26,8 @@ const AppLayout = () => {
         // gap: "20px",
       }}
     >
-      <Sidebar />
+      {!isAdmin && <Sidebar />}
+      {isAdmin && <SidebarAdmin />}
 
       <div style={{ padding: "10px 10px" }}>
         <div

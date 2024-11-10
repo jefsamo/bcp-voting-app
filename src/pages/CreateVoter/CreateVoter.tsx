@@ -45,7 +45,6 @@ const CreateVoter = () => {
       args: [`0x${address.slice(2)}`, name, BigInt(age)],
     });
   };
-  console.log("0xf420567AB3735063a21D231aEcBa1c5cae9cdf77".slice(2));
   return (
     <div>
       <Text size="lg" className={classes.title}>

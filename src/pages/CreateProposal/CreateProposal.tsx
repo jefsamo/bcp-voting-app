@@ -15,7 +15,6 @@ const CreateProposal = () => {
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  console.log(Math.floor(startDate?.getTime()! / 1000));
 
   const floating = value.trim().length !== 0 || focused || undefined;
   const floatingDescription =
@@ -39,6 +38,7 @@ const CreateProposal = () => {
       ],
     });
   };
+
   useEffect(() => {
     if (isSuccess) {
       toast.success("Proposal created successfully");

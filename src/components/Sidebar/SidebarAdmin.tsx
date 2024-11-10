@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { Group } from "@mantine/core";
-import { IconMailOpenedFilled, IconDashboard } from "@tabler/icons-react";
+import {
+  IconFingerprint,
+  IconKey,
+  IconMailOpenedFilled,
+  IconDashboard,
+  IconMailUp,
+} from "@tabler/icons-react";
 import { MantineLogo } from "@mantinex/mantine-logo";
 import classes from "./Sidebar.module.css";
 import { NavLink } from "react-router-dom";
@@ -13,10 +19,17 @@ type Data = {
 
 const data: Data[] = [
   { link: "dashboard", label: "Dashboard", icon: IconDashboard },
+  { link: "create-voter", label: "Create Voter", icon: IconFingerprint },
   { link: "proposals", label: "Proposals", icon: IconMailOpenedFilled },
+  {
+    link: "create-proposal",
+    label: "Create Proposal",
+    icon: IconMailUp,
+  },
+  { link: "voters", label: "Voters", icon: IconKey },
 ];
 
-const Sidebar = () => {
+const SidebarAdmin = () => {
   const currentActive = localStorage.getItem("active") ?? "Dashboard";
   const [active, setActive] = useState<string>(currentActive);
 
@@ -48,4 +61,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SidebarAdmin;

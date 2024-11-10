@@ -25,8 +25,8 @@ function App() {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="create-voter" element={<CreateVoter />} />
-          <Route path="proposals" element={<Proposals />} />
           <Route path="create-proposal" element={<CreateProposal />} />
+          <Route path="proposals" element={<Proposals />} />
           <Route path="voters" element={<Voters />} />
         </Route>
       </Routes>
