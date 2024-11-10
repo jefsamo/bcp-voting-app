@@ -1,4 +1,4 @@
-export const contractAddress = "0x052219C453F330dD0690a565d87A0CF962523172";
+export const contractAddress = "0x986aF5B4330993dbD4977e20ef5c5A34cd8CA524";
 
 export const CONTRACT_ABI = [
   {
@@ -425,6 +425,25 @@ export const CONTRACT_ABI = [
     name: "vote",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_address",
+        type: "address",
+      },
+    ],
+    name: "voterExist",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
