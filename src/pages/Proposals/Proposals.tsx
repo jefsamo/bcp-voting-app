@@ -54,15 +54,13 @@ const Proposals = () => {
   //   args: [BigInt(currentProposal!)],
   // });
 
-  // console.log(optionsVotes);
-
   useEffect(() => {
     if (isSuccess) {
       toast.success("Voter created successfully");
     }
   }, [isSuccess]);
 
-  if (isLoading || singleProposalLoading) {
+  if (isLoading) {
     return (
       <div
         style={{
@@ -77,12 +75,6 @@ const Proposals = () => {
       </div>
     );
   }
-
-  // let reversedProposals = [];
-
-  // for (var i = proposals!.length - 1; i >= 0; i--) {
-  //   reversedProposals?.push(proposals![i]);
-  // }
 
   const vote = () => {
     writeContract({
@@ -158,11 +150,11 @@ const Proposals = () => {
               <Table.Th>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
+          <Table.Tbody>{rows!.length > 0 ? rows : "No proposals"}</Table.Tbody>
         </Table>
       </Table.ScrollContainer>
       <Modal opened={opened} onClose={close} title="Proposal" centered>
-        {singleProposal && (
+        {!singleProposalLoading && (
           <>
             <Select
               label={singleProposal![0]}
@@ -184,6 +176,18 @@ const Proposals = () => {
               Vote
             </Button>
           </>
+        )}
+
+        {singleProposalLoading && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Loader size={20} />
+          </div>
         )}
       </Modal>
     </div>

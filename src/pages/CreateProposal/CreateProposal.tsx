@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 const CreateProposal = () => {
   const { writeContract, isPending, isSuccess, isError } = useWriteContract();
+
   const [focused, setFocused] = useState(false);
   const [focusedDescription, setFocusedDescription] = useState(false);
   const [value, setValue] = useState("");

@@ -9,6 +9,7 @@ import { config } from "./wagmi.ts";
 import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import "@rainbow-me/rainbowkit/styles.css";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import "./index.css";
 import "@mantine/dates/styles.css";
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
         <RainbowKitProvider modalSize="compact">
           <MantineProvider>
             <App />

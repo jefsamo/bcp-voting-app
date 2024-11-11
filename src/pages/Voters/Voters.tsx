@@ -49,7 +49,7 @@ const Voters = () => {
               <Table.Th>Address</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
+          <Table.Tbody>{rows!.length > 0 ? rows : "No voters"}</Table.Tbody>
         </Table>
       </ScrollArea>
     </div>
