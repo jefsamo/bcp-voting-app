@@ -4,11 +4,9 @@ import {
   IconDiscount2,
   IconReceipt2,
   IconCoin,
-  IconArrowUpRight,
-  IconArrowDownRight,
 } from "@tabler/icons-react";
 import classes from "./StatsGrid.module.css";
-import { useReadContracts } from "wagmi";
+import { useReadContract, useReadContracts } from "wagmi";
 import { CONTRACT_ABI, contractAddress } from "../../constants";
 
 const icons = {
@@ -41,6 +39,16 @@ const StatsGrid = () => {
     ],
   });
 
+  const { data: proposals } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: contractAddress,
+    functionName: "getAllProposals",
+  });
+
+  const totalVotes = proposals?.reduce((acc, cur) => {
+    return acc + Number(cur.voteCount);
+  }, 0);
+
   if (isLoading) {
     return (
       <div
@@ -68,26 +76,22 @@ const StatsGrid = () => {
       title: "Total Proposals",
       icon: "receipt",
       value: Number(multipleData![0]?.result) ?? 0,
-      diff: 20,
     },
-    { title: "Total Votes", icon: "coin", value: "4,145", diff: -13 },
+    { title: "Total Votes", icon: "coin", value: totalVotes, diff: -13 },
     {
       title: "Number of Voters",
       icon: "discount",
       value: Number(multipleData![1]?.result) ?? 0,
-      diff: 18,
     },
     {
       title: "On going proposals",
       icon: "user",
       value: onGoingProposals?.length ?? 0,
-      diff: -30,
     },
   ] as const;
 
   const stats = data.map((stat) => {
     const Icon = icons[stat.icon];
-    const DiffIcon = stat.diff > 0 ? IconArrowUpRight : IconArrowDownRight;
 
     return (
       <Paper withBorder p="md" radius="md" key={stat.title}>
@@ -100,20 +104,7 @@ const StatsGrid = () => {
 
         <Group align="flex-end" gap="xs" mt={25}>
           <Text className={classes.value}>{stat.value}</Text>
-          <Text
-            c={stat.diff > 0 ? "teal" : "red"}
-            fz="sm"
-            fw={500}
-            className={classes.diff}
-          >
-            <span>{stat.diff}%</span>
-            <DiffIcon size="1rem" stroke={1.5} />
-          </Text>
         </Group>
-
-        <Text fz="xs" c="dimmed" mt={7}>
-          Compared to previous month
-        </Text>
       </Paper>
     );
   });

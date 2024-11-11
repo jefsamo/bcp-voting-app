@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Group, Space, Text, TextInput } from "@mantine/core";
 import classes from "./input.module.css";
-// import { useDisclosure } from "@mantine/hooks";
 import { useWriteContract } from "wagmi";
 import { CONTRACT_ABI, contractAddress } from "../../constants";
 import toast from "react-hot-toast";
@@ -23,17 +22,18 @@ const CreateVoter = () => {
 
   const floatingName = name.trim().length !== 0 || focusedName || undefined;
 
-  // const [loading] = useDisclosure();
-
   useEffect(() => {
     if (isSuccess) {
       toast.success("Voter created successfully");
+      setName("");
+      setAddress("");
+      setAge("");
     }
   }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
-      toast.success("There was a problem creating voter");
+      toast.error("There was a problem creating voter");
     }
   }, [isError]);
 

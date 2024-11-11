@@ -41,7 +41,7 @@ const SidebarAdmin = () => {
       key={item.label}
       onClick={() => {
         setActive(item.label);
-        localStorage.setItem("active", item.label);
+        // localStorage.setItem("active", item.label);
       }}
     >
       <item.icon className={classes.linkIcon} stroke={1.5} />

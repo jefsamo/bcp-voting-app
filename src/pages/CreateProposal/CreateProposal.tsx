@@ -42,12 +42,16 @@ const CreateProposal = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Proposal created successfully");
+      setDescription("");
+      setValue("");
+      setStartDate(null);
+      setEndDate(null);
     }
   }, [isSuccess]);
 
   useEffect(() => {
     if (isError) {
-      toast.success("There was a problem creating proposal");
+      toast.error("There was a problem creating proposal");
     }
   }, [isError]);
 

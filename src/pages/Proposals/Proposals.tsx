@@ -9,7 +9,7 @@ import {
   Badge,
 } from "@mantine/core";
 import { CONTRACT_ABI, contractAddress } from "../../constants";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useReadContract, useWriteContract } from "wagmi";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -25,7 +25,7 @@ const Proposals = () => {
   const [searchValue, setSearchValue] = useState("");
   const { writeContract, isPending, isSuccess } = useWriteContract();
 
-  const { address } = useAccount();
+  // const { address } = useAccount();
   const [currentProposal, setCurrentProposal] = useState<number>(0);
 
   const { data: proposals, isLoading } = useReadContract({
@@ -41,14 +41,20 @@ const Proposals = () => {
       functionName: "viewProposal",
       args: [BigInt(currentProposal!)],
     });
-  const { data: voterExist } = useReadContract({
-    abi: CONTRACT_ABI,
-    address: contractAddress,
-    functionName: "voterExist",
-    args: [`0x${address?.slice(2)}`],
-    // args: [`0x8c818D80ebE5bc0d6Cd38E35d2749fc7aa100C78`],
-  });
-  console.log(voterExist);
+  // const { data: voterExist } = useReadContract({
+  //   abi: CONTRACT_ABI,
+  //   address: contractAddress,
+  //   functionName: "voterExist",
+  //   args: [`0x${address?.slice(2)}`],
+  // });
+  // const { data: optionsVotes } = useReadContract({
+  //   abi: CONTRACT_ABI,
+  //   address: contractAddress,
+  //   functionName: "getOptionVotes",
+  //   args: [BigInt(currentProposal!)],
+  // });
+
+  // console.log(optionsVotes);
 
   useEffect(() => {
     if (isSuccess) {
@@ -86,14 +92,14 @@ const Proposals = () => {
       args: [BigInt(currentProposal ?? 0), searchValue],
     });
   };
-
+  let ongoing;
+  const currentTime = Math.floor(Date.now() / 1000);
   const rows = proposals?.map((proposal, i) => {
-    const ongoing = !(
-      Math.floor(Date.now() / 1000) >= Number(proposal?.startTime) &&
-      Math.floor(Date.now() / 1000) < Number(proposal?.endTime)
-    );
+    ongoing =
+      currentTime >= Number(proposal?.startTime) &&
+      currentTime < Number(proposal?.endTime);
 
-    console.log(!voterExist && !ongoing);
+    // console.log(!voterExist && !ongoing);
     return (
       <Table.Tr key={i}>
         <Table.Td>
@@ -107,20 +113,31 @@ const Proposals = () => {
         </Table.Td>
         <Table.Td> {convertToReadableDate(proposal?.endTime) ?? "--"}</Table.Td>
         <Table.Td>
-          <Badge color={ongoing ? "red" : "green"}>
-            {ongoing ? "Ended" : "Live"}
+          <Badge
+            color={
+              currentTime < Number(proposal?.startTime)
+                ? "gray"
+                : ongoing
+                  ? "green"
+                  : "red"
+            }
+          >
+            {currentTime < Number(proposal?.startTime)
+              ? "Not started"
+              : ongoing
+                ? "Live"
+                : "Ended"}
           </Badge>
         </Table.Td>
         <Table.Td>
           <Button
-            disabled={!ongoing && !voterExist}
             onClick={() => {
               open();
               //
               setCurrentProposal(i);
             }}
           >
-            Vote
+            View
           </Button>
         </Table.Td>
       </Table.Tr>
@@ -148,16 +165,17 @@ const Proposals = () => {
         {singleProposal && (
           <>
             <Select
-              label={singleProposal[0]}
+              label={singleProposal![0]}
               placeholder="Pick value"
               searchValue={searchValue}
               onSearchChange={setSearchValue}
-              data={singleProposal[5]}
+              data={singleProposal![5]}
               searchable
             />
             <Space h="md" />
             <Button
               loading={isPending}
+              disabled={!ongoing}
               onClick={(e) => {
                 e.preventDefault();
                 vote();
