@@ -125,7 +125,6 @@ const Proposals = () => {
           <Button
             onClick={() => {
               open();
-              //
               setCurrentProposal(i);
             }}
           >
