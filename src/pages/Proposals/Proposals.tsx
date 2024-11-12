@@ -57,6 +57,7 @@ const Proposals = () => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Voted successfully");
+      close();
     }
   }, [isSuccess]);
 
