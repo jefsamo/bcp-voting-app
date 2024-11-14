@@ -16,7 +16,6 @@ import toast from "react-hot-toast";
 
 const convertToReadableDate = (epoch: BigInt): string => {
   const date = new Date(Number(epoch) * 1000);
-
   return `${date.toDateString()} ${date.toLocaleTimeString()}`;
 };
 
@@ -95,6 +94,7 @@ const Proposals = () => {
     });
   };
   let ongoing;
+  // Check for proposals existence before attempting to map them
   const rows = proposals?.map((proposal, i) => {
     ongoing =
       currentTime >= Number(proposal?.startTime) &&
@@ -111,7 +111,7 @@ const Proposals = () => {
         <Table.Td>
           {convertToReadableDate(proposal?.startTime) ?? "--"}
         </Table.Td>
-        <Table.Td> {convertToReadableDate(proposal?.endTime) ?? "--"}</Table.Td>
+        <Table.Td>{convertToReadableDate(proposal?.endTime) ?? "--"}</Table.Td>
         <Table.Td>
           <Badge
             color={
@@ -157,7 +157,10 @@ const Proposals = () => {
               <Table.Th>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>{rows?.length ? rows : "No proposals"}</Table.Tbody>
+          <Table.Tbody>
+            {rows?.length ? rows : "No proposals"}{" "}
+            {/* Ensure rows is not null or empty */}
+          </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
       <Modal opened={opened} onClose={close} title="Proposal" centered>
