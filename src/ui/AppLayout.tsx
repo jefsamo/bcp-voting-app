@@ -16,6 +16,9 @@ const AppLayout = () => {
   });
 
   const isAdmin = address === adminAddress;
+  console.log(isAdmin);
+  console.log(address);
+  console.log(isAdmin);
 
   return (
     <div
@@ -26,8 +29,11 @@ const AppLayout = () => {
         // gap: "20px",
       }}
     >
-      {!adminAddress && <Sidebar />}
-      {address && adminAddress && isAdmin && <SidebarAdmin />}
+      {!isAdmin && <Sidebar />}
+      {isAdmin && <SidebarAdmin />}
+
+      {/* {!adminAddress && <Sidebar />}
+      {address && adminAddress && isAdmin && <SidebarAdmin />} */}
 
       <div style={{ padding: "10px 10px" }}>
         <div
