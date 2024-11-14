@@ -26,8 +26,8 @@ const AppLayout = () => {
         // gap: "20px",
       }}
     >
-      {!isAdmin && <Sidebar />}
-      {isAdmin && <SidebarAdmin />}
+      {!adminAddress && <Sidebar />}
+      {address && adminAddress && isAdmin && <SidebarAdmin />}
 
       <div style={{ padding: "10px 10px" }}>
         <div

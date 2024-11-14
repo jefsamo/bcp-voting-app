@@ -16,6 +16,7 @@ const ProtectedRoute = ({ children }: Props) => {
     address: contractAddress,
     functionName: "admin",
   });
+  console.log(address);
 
   const isAdmin = address === adminAddress;
   const navigate = useNavigate();

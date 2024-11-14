@@ -75,18 +75,18 @@ const StatsGrid = () => {
     {
       title: "Total Proposals",
       icon: "receipt",
-      value: Number(multipleData![0]?.result) ?? 0,
+      value: Number(multipleData![0]?.result) || 0,
     },
-    { title: "Total Votes", icon: "coin", value: totalVotes, diff: -13 },
+    { title: "Total Votes", icon: "coin", value: totalVotes || 0, diff: -13 },
     {
       title: "Number of Voters",
       icon: "discount",
-      value: Number(multipleData![1]?.result) ?? 0,
+      value: Number(multipleData![1]?.result) || 0,
     },
     {
       title: "On going proposals",
       icon: "user",
-      value: onGoingProposals?.length ?? 0,
+      value: onGoingProposals?.length || 0,
     },
   ] as const;
 
