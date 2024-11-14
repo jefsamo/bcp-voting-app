@@ -157,10 +157,7 @@ const Proposals = () => {
               <Table.Th>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>
-            {rows && rows}
-            {!rows && "No proposals"}
-          </Table.Tbody>
+          <Table.Tbody>{rows?.length ? rows : "No proposals"}</Table.Tbody>
         </Table>
       </Table.ScrollContainer>
       <Modal opened={opened} onClose={close} title="Proposal" centered>
