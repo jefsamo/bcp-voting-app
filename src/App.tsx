@@ -10,6 +10,7 @@ import Proposals from "./pages/Proposals/Proposals";
 import Voters from "./pages/Voters/Voters";
 import CreateProposal from "./pages/CreateProposal/CreateProposal";
 import { Toaster } from "react-hot-toast";
+// import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="proposals" element={<Proposals />} />
           <Route path="voters" element={<Voters />} />
         </Route>
+        {/* <Route path="*" element={<NotFound />} /> */}
       </Routes>
       <Toaster
         position="top-center"
