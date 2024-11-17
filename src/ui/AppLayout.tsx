@@ -7,7 +7,8 @@ import { useAccount } from "wagmi";
 import SidebarAdmin from "../components/Sidebar/SidebarAdmin";
 
 const AppLayout = () => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
+  console.log(isConnected);
 
   const { data: adminAddress } = useReadContract({
     abi: CONTRACT_ABI,
@@ -21,7 +22,7 @@ const AppLayout = () => {
   } else {
     isAdmin = false;
   }
-
+  console.log("isAdmin", isAdmin);
   return (
     <div
       style={{
@@ -31,7 +32,8 @@ const AppLayout = () => {
         // gap: "20px",
       }}
     >
-      {!address || (!isAdmin && <Sidebar />)}
+      {/* {(!address || !isAdmin) && <Sidebar />} */}
+      {(!isConnected || !isAdmin) && <Sidebar />}
       {isAdmin && <SidebarAdmin />}
 
       <div style={{ padding: "10px 10px" }}>
