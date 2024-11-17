@@ -8,7 +8,6 @@ import SidebarAdmin from "../components/Sidebar/SidebarAdmin";
 
 const AppLayout = () => {
   const { address, isConnected } = useAccount();
-  console.log(isConnected);
 
   const { data: adminAddress } = useReadContract({
     abi: CONTRACT_ABI,

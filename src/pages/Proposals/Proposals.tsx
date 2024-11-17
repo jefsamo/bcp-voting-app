@@ -27,7 +27,11 @@ const Proposals = () => {
   const { address } = useAccount();
   const [currentProposal, setCurrentProposal] = useState<number>(0);
 
-  const { data: proposals, isLoading } = useReadContract({
+  const {
+    data: proposals,
+    isLoading,
+    refetch,
+  } = useReadContract({
     abi: CONTRACT_ABI,
     address: contractAddress,
     functionName: "getAllProposals",
@@ -63,11 +67,15 @@ const Proposals = () => {
     singleProposal && currentTime > Number(singleProposal![4]);
 
   useEffect(() => {
+    const fetch = async () => {
+      await refetch({ cancelRefetch: false });
+    };
     if (isSuccess) {
       toast.success("Voted successfully");
+      fetch();
       close();
     }
-  }, [isSuccess]);
+  }, [isSuccess, refetch, close]);
 
   if (isLoading) {
     return (
