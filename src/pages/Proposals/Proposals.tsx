@@ -157,21 +157,18 @@ const Proposals = () => {
               <Table.Th>Status</Table.Th>
             </Table.Tr>
           </Table.Thead>
-          <Table.Tbody>
-            {rows?.length ? rows : "No proposals"}{" "}
-            {/* Ensure rows is not null or empty */}
-          </Table.Tbody>
+          <Table.Tbody>{rows?.length ? rows : "No proposals"}</Table.Tbody>
         </Table>
       </Table.ScrollContainer>
       <Modal opened={opened} onClose={close} title="Proposal" centered>
         {!singleProposalLoading && !hasProposalEnded && (
           <>
             <Select
-              label={singleProposal![0]}
+              label={singleProposal && singleProposal![0]}
               placeholder="Pick value"
               searchValue={searchValue}
               onSearchChange={setSearchValue}
-              data={singleProposal![5]}
+              data={singleProposal && singleProposal![5]}
               searchable
             />
             <Space h="md" />

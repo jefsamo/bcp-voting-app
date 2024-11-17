@@ -15,10 +15,12 @@ const AppLayout = () => {
     functionName: "admin",
   });
 
-  const isAdmin = address === adminAddress;
-  console.log(isAdmin);
-  console.log(address);
-  console.log(isAdmin);
+  let isAdmin;
+  if (address) {
+    isAdmin = address === adminAddress;
+  } else {
+    isAdmin = false;
+  }
 
   return (
     <div
@@ -29,11 +31,8 @@ const AppLayout = () => {
         // gap: "20px",
       }}
     >
-      {!isAdmin && <Sidebar />}
+      {!address || (!isAdmin && <Sidebar />)}
       {isAdmin && <SidebarAdmin />}
-
-      {/* {!adminAddress && <Sidebar />}
-      {address && adminAddress && isAdmin && <SidebarAdmin />} */}
 
       <div style={{ padding: "10px 10px" }}>
         <div
