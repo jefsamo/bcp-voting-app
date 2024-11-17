@@ -22,7 +22,6 @@ const AppLayout = () => {
   } else {
     isAdmin = false;
   }
-  console.log("isAdmin", isAdmin);
   return (
     <div
       style={{
