@@ -36,6 +36,12 @@ const Proposals = () => {
     address: contractAddress,
     functionName: "getAllProposals",
   });
+  const { data: hasVoted } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: contractAddress,
+    functionName: "voters",
+    args: [`0x${address?.slice(2)}`],
+  });
 
   const { data: singleProposal, isLoading: singleProposalLoading } =
     useReadContract({
@@ -182,7 +188,7 @@ const Proposals = () => {
             <Space h="md" />
             <Button
               loading={isPending}
-              disabled={!ongoing || !voterExist}
+              disabled={!ongoing || !voterExist || hasVoted?.[0]}
               onClick={(e) => {
                 e.preventDefault();
                 vote();
