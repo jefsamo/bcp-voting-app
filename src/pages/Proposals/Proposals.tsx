@@ -58,6 +58,7 @@ const Proposals = () => {
     functionName: "voterExist",
     args: [`0x${address?.slice(2)}`],
   });
+
   const { data: optionsVotes } = useReadContract({
     abi: CONTRACT_ABI,
     address: contractAddress,
@@ -108,7 +109,7 @@ const Proposals = () => {
       args: [BigInt(currentProposal ?? 0), searchValue],
     });
   };
-  let ongoing;
+  let ongoing: boolean;
   // Check for proposals existence before attempting to map them
   const rows = proposals?.map((proposal, i) => {
     ongoing =
@@ -189,7 +190,7 @@ const Proposals = () => {
             <Space h="md" />
             <Button
               loading={isPending}
-              disabled={!ongoing || !voterExist || hasVoted}
+              disabled={!ongoing! || !voterExist || hasVoted}
               onClick={(e) => {
                 e.preventDefault();
                 vote();
